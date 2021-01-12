@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
-const colors = require('colors');
 const targetPath = './src/environments';
 const filename = 'environment.ts';
 
@@ -27,4 +26,4 @@ catch (e) {
 
 fs.writeFileSync(path.join(targetPath, filename), envConfigFile);
 
-console.log(colors.magenta(`Angular environment.ts file generated correctly\n`));
+console.log(`Angular environment.ts file generated correctly\n`);
