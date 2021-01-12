@@ -1,0 +1,16 @@
+.dashboard {
+    height: 100%;
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-rows: auto;
+}
+
+.main {
+    overflow: auto;
+    background-color: var(--bg-color);    
+}
+
+.content {
+    padding: 1rem;
+    background-color: white;
+}

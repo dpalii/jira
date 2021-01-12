@@ -1,0 +1,61 @@
+<div class="login">
+    <form 
+        class="login__form"
+        (ngSubmit)="handleSubmit()"
+        [formGroup]="loginForm"
+    >
+        <h2 class="login__header">Sign in</h2>
+        <mat-form-field class="login__field" appearance="fill">
+            <mat-label>Email</mat-label>
+            <input 
+                autocomplete="off"
+                matInput 
+                placeholder="example@gmail.com"
+                formControlName="email"
+            >
+            <mat-error>Should be a <strong>valid</strong> email</mat-error>
+        </mat-form-field>
+        <mat-form-field class="login__field" appearance="fill">
+            <mat-label>Password</mat-label>
+            <input 
+                autocomplete="off"
+                matInput 
+                [type]="hide ? 'password' : 'text'"
+                formControlName="password"
+            >
+            <button 
+                type="button" 
+                mat-icon-button 
+                matSuffix 
+                (click)="hide = !hide" [attr.aria-label]="'Hide password'" 
+                [attr.aria-pressed]="hide"
+            >
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error>Password is <strong>required</strong></mat-error>
+        </mat-form-field>
+        <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            class="login__button"
+        >
+            Sign in
+        </button>
+        <button
+            type="button"
+            mat-raised-button
+            class="login__button"
+            (click)="handleGoogleLogin()"
+        >
+            Sign in with
+            <img 
+                src="assets/images/google.svg" 
+                alt="google logo"
+                class="login__google"
+            /> 
+        </button>
+        <p class="login__error">{{error}}</p>
+        <a routerLink="/register">Don't have an account?</a>
+    </form>
+</div>

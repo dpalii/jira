@@ -1,0 +1,40 @@
+<div class="menu">
+    <a class="logo" routerLink="/">
+        <img src="assets/images/logo.svg" class="logo__img" />
+        <h2 class="logo__title">Jira</h2>
+    </a>
+    <mat-divider class="menu__divider"></mat-divider>
+    <a
+        class="menu__link"
+        routerLink="/dashboard"
+        mat-button
+    >
+        <mat-icon class="menu__icon">dashboard</mat-icon>
+        <span>Dashboard</span>
+    </a>
+    <div class="menu__spacer"></div>
+    <button 
+        class="menu__user"
+        [matMenuTriggerFor]="menu"
+        mat-button
+        *ngIf="user !== null; else loading"
+    >
+        <img class="menu__avatar" [src]="user.photoURL || 'assets/images/default_avatar.svg'"/>
+        <span>{{user.displayName || user.email}}</span>
+    </button>
+    <ng-template #loading>
+        <div class="menu__loading">
+            <mat-spinner diameter="36"></mat-spinner>
+        </div>
+    </ng-template>
+
+    <mat-menu #menu="matMenu">
+        <button 
+            mat-menu-item
+            (click)="handleLogout()"
+        >
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Log out</span>
+        </button>
+    </mat-menu>
+</div>

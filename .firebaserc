@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "angular-hw-jira": {
+      "hosting": {
+        "jira": [
+          "angular-hw-jira"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+<div class="register">
+    <form 
+        class="register__form"
+        (ngSubmit)="handleSubmit()"
+        [formGroup]="registerForm"
+    >
+        <h2 class="register__header">Sign up</h2>
+        <mat-form-field class="register__field" appearance="fill">
+            <mat-label>Email</mat-label>
+            <input 
+                autocomplete="off"
+                matInput 
+                placeholder="example@gmail.com"
+                formControlName="email"
+            >
+            <mat-error>Should be a <strong>valid</strong> email</mat-error>
+        </mat-form-field>
+        <mat-form-field class="register__field" appearance="fill">
+            <mat-label>Password</mat-label>
+            <input 
+                autocomplete="off"
+                matInput 
+                [type]="hide ? 'password' : 'text'"
+                formControlName="password"
+            >
+            <button 
+                type="button" 
+                mat-icon-button 
+                matSuffix 
+                (click)="hide = !hide" [attr.aria-label]="'Hide password'" 
+                [attr.aria-pressed]="hide"
+            >
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error>Password should be at least <strong>6 characters long</strong></mat-error>
+        </mat-form-field>
+        <mat-form-field class="register__field" appearance="fill">
+            <mat-label>Repeat password</mat-label>
+            <input 
+                autocomplete="off"
+                matInput 
+                [type]="hideRepeat ? 'password' : 'text'"
+                formControlName="repeatPassword"
+                [errorStateMatcher]="matcher"
+            >
+            <button 
+                type="button" 
+                mat-icon-button 
+                matSuffix 
+                (click)="hideRepeat = !hideRepeat" [attr.aria-label]="'Repeat password'" 
+                [attr.aria-pressed]="hideRepeat"
+            >
+                <mat-icon>{{hideRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error>Passwords do not match</mat-error>
+        </mat-form-field>
+        <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            class="register__button"
+        >
+            Sign up
+        </button>
+        <button
+            type="button"
+            mat-raised-button
+            class="register__button"
+            (click)="handleGoogleLogin()"
+        >
+            Sign in with
+            <img 
+                src="assets/images/google.svg" 
+                alt="google logo"
+                class="register__google"
+            /> 
+        </button>
+        <p class="register__error">{{error}}</p>
+        <a routerLink="/login">Already have an account?</a>
+    </form>
+</div>
