@@ -9,7 +9,7 @@
     "build": "npm run config && ng build",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "npm run config && ng builg --aot --prod"
+    "postinstall": "npm run config && ng build --aot --prod"
   },
   "private": true,
   "dependencies": {
