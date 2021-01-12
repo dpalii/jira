@@ -4,11 +4,12 @@
   "scripts": {
     "ng": "ng",
     "config": "ts-node setenv.ts",
-    "start": "npm run config && ng serve",
+    "start": "npm run config && node server.js",
+    "start-dev": "npm run config && ng serve",
     "build": "npm run config && ng build",
-    "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "npm run config && ng builg --aot --prod"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +25,7 @@
     "@angular/platform-browser-dynamic": "~11.0.6",
     "@angular/router": "~11.0.6",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "firebase": "^8.2.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

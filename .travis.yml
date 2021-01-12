@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+- '10'
+before_install:
+- npm install -g @angular/cli
+install: npm install
+branches:
+  only:
+  - master
+deploy:
+  provider: heroku
+  app: angular-hw-jira
+  api_key:
+    secure: LsbHFZBvts0SmjoXEa2J99l0rCSW+yZSx8W3pwi3nsvHFTNTZ3LT//1HiEQgAdm8cqS2DBcKDk/UEoYskqjEfH2MO5RQzhwkQh9SmB/UUAgadtVRprx+u9/K8i7bhSEYJ1TAeIMSwnhaDljicfhXaKCI/Ekstb9tj4/qyvfgIW53xfj7J3CB+5R4UoAmuMul/f9Y4qAzpj+k6VMLLV3PNdPKbuD4Q1eY54IW7LA1ORwP9s9VaRZnhGm9xWymQav88DLu+0T/+2NNC97JdzYXs9BoBI9qHAgCHs2pkg6U0lC+jRx/ILWoKR64LVtnNGy6UG7SV8+LWASWtZsM81Lf/uOm/x1sqyS2BzyQ/L4DtXiRLZMSUtAYFrA6yt+CcnIwmIPiSe/u2XB+YZU4mlMC/o51LmYy2S4nLbd+BnRO036tkKbkMvSJB3ZeuUO0fSB++O8zFnr5D18tgLTn0hQ7XmkP+Viv6LBUdIhVclCmb4gEO8dL8qofefCPAgKAFlZhO50hfo1oYmgSJvVQRa1FEFFK1xLvbyLG+vaa8ITvCvdhS0FdBuZu5d1SJwCpT3ynkjjhGhf8b34k7AwUnvVPNxpHhaUC+MGEt4kgXVsqePvVYWgA0NuSMLqbqbNUlnJpMr6A0l9doFXOeHRIPQgPg9m3g7WbNX3FseT8XAQ/AP0=
