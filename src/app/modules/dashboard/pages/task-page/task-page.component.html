@@ -2,11 +2,19 @@
     <app-header>{{task?.title}}</app-header>
     <div class="task-page">
         <div class="task-page__controls">
-            <button class="task-page__icon-button" mat-button>
+            <button 
+                class="task-page__icon-button"
+                mat-button
+                (click)="openDialog()"
+            >
                 <mat-icon>edit</mat-icon>
                 <span> Edit</span>
             </button>
-            <button class="task-page__icon-button" mat-button>
+            <button 
+                class="task-page__icon-button" 
+                mat-button
+                (click)="handleDelete()"
+            >
                 <mat-icon>delete</mat-icon>
                 <span> Delete</span>
             </button>

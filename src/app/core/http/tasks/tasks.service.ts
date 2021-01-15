@@ -114,19 +114,35 @@ export class TasksService {
     return this.afs.collection<Task>('tasks').valueChanges();
   }
 
-  updateTask(task: Task): Observable<void> {
+  updateTaskState(task: Task): Observable<void> {
     const taskRef: AngularFirestoreDocument<Task> = this.afs.doc(`tasks/${task.id}`);
     return from(taskRef.set(task, { merge: true }));
+  }
+
+  updateTask(formData: TaskFormData): Observable<void> {
+    const taskRef: AngularFirestoreDocument<Task> = this.afs.doc(`tasks/${formData.id}`);
+    const data = {
+      ...formData,
+      updatedDate: (new Date()).toString()
+    };
+
+    return from(taskRef.set(data as Task, { merge: true }));
+  }
+
+  deleteTask(id: string): Observable<void> {
+    const taskRef = this.afs.doc(`tasks/${id}`);
+
+    return from(taskRef.delete());
   }
 
   createTask(formData: TaskFormData): Observable<void> {
     const id = this.afs.createId();
     const taskRef = this.afs.doc(`tasks/${id}`);
+
     const data: Task = {
       ...formData,
       id,
       reporter: null,
-      assignee: null,
       createdDate: (new Date()).toString(),
       updatedDate: null,
       status: taskStates[0]
@@ -141,10 +157,6 @@ export class TasksService {
       }),
       switchMap(reporter => {
         data.reporter = reporter as User;
-        return this.usersService.getUserByEmail(formData.assignee);
-      }),
-      switchMap(assignee => {
-        data.assignee = assignee ? assignee as User : null;
         return taskRef.set(data as Task);
       })
     );

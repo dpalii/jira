@@ -4,15 +4,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { User, UsersService } from 'src/app/core/http/users/users.service';
-import { taskPriorities, TaskPriority, TaskType, taskTypes } from 'src/app/core/http/tasks/tasks.service';
+import { Task, taskPriorities, TaskPriority, TaskType, taskTypes } from 'src/app/core/http/tasks/tasks.service';
 
 export interface TaskFormData {
+  id: string | null;
   title: string;
   estimate: number | null;
   type: string;
   priority: string;
   description: string;
-  assignee: string | null;
+  assignee: User | null;
   labels: string[];
   dueDate: string | null;
 }
@@ -38,17 +39,17 @@ export class CreateTaskDialogComponent implements OnInit {
     private usersService: UsersService,
     public dialogRef: MatDialogRef<CreateTaskDialogComponent>,
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: TaskFormData
+    @Inject(MAT_DIALOG_DATA) public data: Task
   ) {
     this.form = this.fb.group({
-      title: [(data && data.title) || '', Validators.required],
-      estimate: [(data && data.estimate) || null, Validators.min(0)],
-      type: [(data && data.type) || 'task', Validators.required],
-      priority: [(data && data.priority) || 'major', Validators.required],
-      description: [(data && data.description) || ''],
-      assignee: [(data && data.assignee) || ''],
-      labels: [(data && data.labels) || []],
-      dueDate: [(data && data.dueDate) || null]
+      title: [(data?.title) || '', Validators.required],
+      estimate: [(data?.estimate) || null, Validators.min(0)],
+      type: [(data?.type) || 'task', Validators.required],
+      priority: [(data?.priority) || 'major', Validators.required],
+      description: [(data?.description) || ''],
+      assignee: [(data?.assignee?.email) || ''],
+      labels: [(data?.labels) || []],
+      dueDate: [(data?.dueDate) || null]
     });
   }
 
@@ -115,6 +116,8 @@ export class CreateTaskDialogComponent implements OnInit {
       if (formData.assignee) {
         this.usersService.getUserByEmail(formData.assignee).subscribe(user => {
           if (user) {
+            formData.id = this.data?.id || null;
+            formData.assignee = user;
             this.dialogRef.close(formData);
           }
           else {

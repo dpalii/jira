@@ -47,7 +47,7 @@ export class TaskListComponent implements OnInit {
         event.currentIndex);
       const newCol = this.columns.find(col => col.tasks === event.container.data) as Column;
 
-      this.tasksService.updateTask({
+      this.tasksService.updateTaskState({
       ...event.container.data[event.currentIndex],
       status: newCol.name
       });
