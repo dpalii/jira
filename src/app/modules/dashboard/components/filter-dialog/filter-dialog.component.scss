@@ -1,0 +1,10 @@
+.filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+
+    &__wide-input {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}

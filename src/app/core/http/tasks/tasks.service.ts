@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+import firebase from 'firebase/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { TaskFormData } from 'src/app/modules/dashboard/components/create-task-dialog/create-task-dialog.component';
 import { AuthService } from '../../auth/auth.service';
 import { switchMap } from 'rxjs/operators';
 import { User, UsersService } from '../users/users.service';
+import { Filters } from 'src/app/modules/dashboard/components/filter-dialog/filter-dialog.component';
 
 export interface Task {
   id: string;
@@ -110,8 +112,16 @@ export class TasksService {
     return this.afs.doc<Task>(`tasks/${id}`).valueChanges();
   }
 
-  getTasks(): Observable<Task[]> {
-    return this.afs.collection<Task>('tasks').valueChanges();
+  getTasks(filters: Filters): Observable<Task[]> {
+    return this.afs.collection<Task>('tasks', ref => {
+      let query: firebase.firestore.CollectionReference | firebase.firestore.Query = ref;
+      if (filters.label) { query = query.where('labels', 'array-contains', filters.label); }
+      if (filters.assignee) { query = query.where('assignee.email', '==', filters.assignee); }
+      if (filters.reporter) { query = query.where('reporter.email', '==', filters.reporter); }
+      if (filters.from) { query = query.where('createdDate', '>=', filters.from); }
+      if (filters.to) { query = query.where('createdDate', '<=', filters.to); }
+      return query;
+    }).valueChanges();
   }
 
   updateTaskState(task: Task): Observable<void> {
@@ -123,7 +133,7 @@ export class TasksService {
     const taskRef: AngularFirestoreDocument<Task> = this.afs.doc(`tasks/${formData.id}`);
     const data = {
       ...formData,
-      updatedDate: (new Date()).toString()
+      updatedDate: (new Date()).toISOString()
     };
 
     return from(taskRef.set(data as Task, { merge: true }));
@@ -143,7 +153,7 @@ export class TasksService {
       ...formData,
       id,
       reporter: null,
-      createdDate: (new Date()).toString(),
+      createdDate: (new Date()).toISOString(),
       updatedDate: null,
       status: taskStates[0]
     };

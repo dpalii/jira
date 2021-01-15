@@ -1,1 +1,83 @@
-<p>filter-dialog works!</p>
+<h2 mat-dialog-title>Filters</h2>
+<mat-dialog-content >
+    <form class="filters" [formGroup]="form">
+        <mat-form-field class="filters__wide-input">
+            <mat-label>Label</mat-label>
+            <input 
+                matInput
+                autocomplete="off"
+                formControlName="label"
+            >
+        </mat-form-field>
+        <mat-form-field class="filters__wide-input">
+            <mat-label>Assignee</mat-label>
+            <input
+                matInput
+                formControlName="assignee"
+                [matAutocomplete]="assigneeAuto"
+                (keyup)="handleTypingPause($event, 'reporter')"
+                (focus)="handleFocus($event)"
+                (focusout)="handleFocusOut($event)"
+            >
+            <mat-autocomplete #assigneeAuto="matAutocomplete">
+                <mat-option *ngFor="let user of users" [value]="user.email">
+                    {{
+                        (user.displayName ? user.displayName + ' - ' : '') + user.email
+                    }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error>User with this email not found</mat-error>
+        </mat-form-field>
+        <mat-form-field class="filters__wide-input">
+            <mat-label>Reporter</mat-label>
+            <input
+                matInput
+                formControlName="reporter"
+                [matAutocomplete]="reporterAuto"
+                (keyup)="handleTypingPause($event, 'reporter')"
+                (focus)="handleFocus($event)"
+                (focusout)="handleFocusOut($event)"
+            >
+            <mat-autocomplete #reporterAuto="matAutocomplete">
+                <mat-option *ngFor="let user of users" [value]="user.email">
+                    {{
+                        (user.displayName ? user.displayName + ' - ' : '') + user.email
+                    }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error>User with this email not found</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Created after</mat-label>
+            <input 
+                matInput
+                type="date"
+                autocomplete="off"
+                formControlName="from"
+                [errorStateMatcher]="matcher"
+            >
+            <mat-error>Invalid date range</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Created before</mat-label>
+            <input 
+                matInput
+                type="date"
+                autocomplete="off"
+                formControlName="to"
+                [errorStateMatcher]="matcher"
+            >
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button 
+        mat-button 
+        color="primary" 
+        cdkFocusInitial
+        (click)="handleConfirm()"
+    >
+        Apply
+    </button>
+</mat-dialog-actions>

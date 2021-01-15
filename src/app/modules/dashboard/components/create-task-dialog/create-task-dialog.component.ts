@@ -118,6 +118,9 @@ export class CreateTaskDialogComponent implements OnInit {
           if (user) {
             formData.id = this.data?.id || null;
             formData.assignee = user;
+            if (formData.dueDate) {
+              formData.dueDate = (new Date(formData.dueDate).toISOString());
+            }
             this.dialogRef.close(formData);
           }
           else {

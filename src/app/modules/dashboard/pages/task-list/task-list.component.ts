@@ -1,9 +1,11 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { Task, TasksService, taskStates } from 'src/app/core/http/tasks/tasks.service';
 
 import { CreateTaskDialogComponent } from '../../components/create-task-dialog/create-task-dialog.component';
+import { FilterDialogComponent, Filters } from '../../components/filter-dialog/filter-dialog.component';
 
 interface Column {
   name: string;
@@ -17,6 +19,14 @@ interface Column {
 })
 export class TaskListComponent implements OnInit {
   readonly taskStates = taskStates;
+  private filters: Filters = {
+    label: null,
+    assignee: null,
+    reporter: null,
+    from: null,
+    to: null
+  };
+  private taskSubscribtion: Subscription | null = null;
   public columns: Column[] = [];
   constructor(
     public dialog: MatDialog,
@@ -24,14 +34,7 @@ export class TaskListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.tasksService.getTasks().subscribe({
-      next: data => {
-        this.columns = taskStates.map(status => ({
-          name: status,
-          tasks: data.filter(task => task.status === status)
-        }));
-      }
-    });
+    this.getTasks(this.filters);
   }
 
   getColumnData(status: string): Task[] {
@@ -48,10 +51,35 @@ export class TaskListComponent implements OnInit {
       const newCol = this.columns.find(col => col.tasks === event.container.data) as Column;
 
       this.tasksService.updateTaskState({
-      ...event.container.data[event.currentIndex],
-      status: newCol.name
+        ...event.container.data[event.currentIndex],
+        status: newCol.name
       });
     }
+  }
+
+  openFilters(): void {
+    const dialogRef = this.dialog.open(FilterDialogComponent, {
+      width: '500px',
+      data: this.filters
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.filters = result;
+        this.getTasks(result);
+      }
+    });
+  }
+
+  clearFilters(): void {
+    this.filters = {
+      label: null,
+      assignee: null,
+      reporter: null,
+      from: null,
+      to: null
+    };
+    this.getTasks(this.filters);
   }
 
   openDialog(): void {
@@ -64,6 +92,20 @@ export class TaskListComponent implements OnInit {
         this.tasksService.createTask(result).subscribe({
           error: err => console.log(err)
         });
+      }
+    });
+  }
+
+  private getTasks(filters: Filters): void {
+    if (this.taskSubscribtion) {
+      this.taskSubscribtion.unsubscribe();
+    }
+    this.taskSubscribtion = this.tasksService.getTasks(filters).subscribe({
+      next: data => {
+        this.columns = taskStates.map(status => ({
+          name: status,
+          tasks: data.filter(task => task.status === status)
+        }));
       }
     });
   }
