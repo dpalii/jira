@@ -1,0 +1,23 @@
+.task-form {
+    box-sizing: border-box;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+
+    &__text-field {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    &__task-icon {
+        height: 1rem;
+        vertical-align: middle;
+        margin-right: 0.5rem;
+    }
+
+    &__text {
+        vertical-align: middle;
+        line-height: 1rem;
+        font-size: 1rem;
+    }
+}

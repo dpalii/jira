@@ -1,1 +1,130 @@
-<p>create-task-dialog works!</p>
+<h2 mat-dialog-title>
+    {{ data ? 'Edit task' : 'New task' }}
+</h2>
+<mat-dialog-content>
+    <form class="task-form" [formGroup]="form">
+        <mat-form-field class="task-form__text-field">
+            <mat-label>Title</mat-label>
+            <input 
+                matInput 
+                type="text" 
+                formControlName="title"
+                autocomplete="off"
+            />
+            <mat-error>Title is <strong>required</strong></mat-error>
+        </mat-form-field>
+        <mat-form-field class="task-form__text-field">
+            <mat-label>Description</mat-label>
+            <textarea
+                matInput
+                formControlName="description"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="10"
+                cdkAutosizeMaxRows="10"
+            >
+            </textarea>
+        </mat-form-field>
+        <mat-form-field class="task-form__text-field">
+            <mat-label>Labels</mat-label>
+            <mat-chip-list #labels>
+                <mat-chip 
+                    *ngFor="let label of controls.labels.value" 
+                    [selectable]="selectable"
+                    [removable]="removable"
+                    (removed)="remove(label)"
+                >
+                    {{label}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input 
+                    placeholder="Add label..."
+                    autocomplete="off"
+                    [matChipInputFor]="labels"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="add($event)"
+                    maxlength="50"
+                >
+            </mat-chip-list>
+            <mat-hint>Max 50 symbols for a label</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="task-form__text-field">
+            <mat-label>Assignee</mat-label>
+            <input
+                matInput
+                formControlName="assignee"
+                [matAutocomplete]="assigneeAuto"
+                (keyup)="handleTypingPause($event)"
+                (focus)="handleFocus($event)"
+            >
+            <mat-autocomplete #assigneeAuto="matAutocomplete">
+                <mat-option *ngFor="let user of users" [value]="user.email">
+                    {{
+                        (user.displayName ? user.displayName + ' - ' : '') + user.email
+                    }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error>User with this email not found</mat-error>
+        </mat-form-field>
+        <mat-form-field class="task-form__other-field">
+            <mat-label>Estimate</mat-label>
+            <input
+                matInput
+                type="number"
+                autocomplete="off"
+                formControlName="estimate"
+                min="0"
+            />
+            <mat-error>Estimate can't be lesser that 0</mat-error>
+        </mat-form-field>
+        <mat-form-field class="task-form__other-field">
+            <mat-label>Due date</mat-label>
+            <input
+                matInput
+                type="date"
+                autocomplete="off"
+                formControlName="dueDate"
+            />
+        </mat-form-field>
+        <mat-form-field class="task-form__other-field">
+            <mat-label>Type</mat-label>
+            <mat-select
+                matInput
+                formControlName="type"
+            >
+                <mat-select-trigger>
+                    <img class="task-form__task-icon" [src]="getType(controls.type.value)?.iconUrl"/>
+                    <span class="task-form__task-text">{{getType(controls.type.value)?.displayName}}</span>
+                </mat-select-trigger>
+                <mat-option class="task-form__option" *ngFor="let type of taskTypes" [value]="type.type">
+                    <img class="task-form__task-icon" [src]="type.iconUrl"/>
+                    <span class="task-form__task-text">{{type.displayName}}</span>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="task-form__other-field">
+            <mat-label>Priority</mat-label>
+            <mat-select
+                matInput
+                formControlName="priority"
+            >
+                <mat-select-trigger>
+                    <img class="task-form__task-icon" [src]="getPriority(controls.priority.value)?.iconUrl"/>
+                    <span class="task-form__task-text">{{getPriority(controls.priority.value)?.displayName}}</span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let priority of taskPriorities" [value]="priority.priority">
+                    <img class="task-form__task-icon" [src]="priority.iconUrl"/>
+                    <span class="task-form__task-text">{{priority.displayName}}</span>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-button (click)="handleConfirm()" color="primary">
+        Confirm
+    </button>
+</mat-dialog-actions>

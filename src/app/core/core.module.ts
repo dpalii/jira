@@ -9,6 +9,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { UsersService } from './http/users/users.service';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ export class CoreModule {
     return {
       ngModule: CoreModule,
       providers: [
+        UsersService,
         AuthService,
         AuthGuard
       ]

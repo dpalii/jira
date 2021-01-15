@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { from, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
+import { User, UsersService } from '../http/users/users.service';
 
 @Injectable()
 export  class  AuthService {
   user$: Observable<firebase.User | null>;
 
-  constructor(private afAuth: AngularFireAuth) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private usersService: UsersService
+  ) {
     this.user$ = this.afAuth.authState;
   }
 
@@ -18,17 +22,24 @@ export  class  AuthService {
     return user !== null;
   }
 
-  login(email: string, password: string): Observable<firebase.auth.UserCredential> {
+  login(email: string, password: string): Observable<void> {
     return from(this.afAuth.signInWithEmailAndPassword(email, password))
       .pipe(
-        tap(data => localStorage.setItem('user', JSON.stringify(data.user)))
+        tap(data => {
+          if (data.user === null) {
+            throw({message: 'Couldn\'t log in'});
+          }
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }),
+        switchMap(data => this.usersService.updateUser(data.user as firebase.User))
       );
   }
 
-  register(email: string, password: string): Observable<firebase.auth.UserCredential> {
+  register(email: string, password: string): Observable<void> {
     return from(this.afAuth.createUserWithEmailAndPassword(email, password))
       .pipe(
-        tap(data => localStorage.setItem('user', JSON.stringify(data.user)))
+        tap(data => localStorage.setItem('user', JSON.stringify(data.user))),
+        switchMap(data => this.usersService.updateUser(data.user as firebase.User))
       );
   }
 
@@ -39,10 +50,16 @@ export  class  AuthService {
       );
   }
 
-  loginWithGoogle(): Observable<firebase.auth.UserCredential> {
+  loginWithGoogle(): Observable<void> {
     return from(this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()))
       .pipe(
-        tap(data => localStorage.setItem('user', JSON.stringify(data.user)))
+        tap(data => {
+          if (data.user === null) {
+            throw({message: 'Couldn\'t log in'});
+          }
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }),
+        switchMap(data => this.usersService.updateUser(data.user as firebase.User))
       );
   }
 }

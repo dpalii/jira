@@ -1,4 +1,31 @@
 <section>
     <app-header>Dashboard</app-header>
-    <p>task-list works!</p>
+    <div class="task-list__controls">
+        <button 
+            class="task-list__icon-button" 
+            mat-button
+            (click)="openDialog()"
+        >
+            <mat-icon>add</mat-icon>
+            <span> Create task</span>
+        </button>
+        <button class="task-list__icon-button" mat-button>
+            <mat-icon>filter_alt</mat-icon>
+            <span> Apply filters</span>
+        </button>
+    </div>
+    <div class="task-list__board" cdkDropListGroup>
+        <div *ngFor="let column of taskStates" class="column">
+            <h2 class="column__header">{{column}}</h2>
+            <div                
+                cdkDropList
+                class="column__list"
+                [cdkDropListData]="getColumnData(column)"
+                (cdkDropListDropped)="drop($event)">
+                <div class="column__item" *ngFor="let item of getColumnData(column)" cdkDrag>
+                    <app-task-list-item [task]="item"></app-task-list-item>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
