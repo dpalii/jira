@@ -1,13 +1,15 @@
 .task-list {
 
     &__controls {
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
     &__board {
         display: grid;
         grid-gap: 1rem;
         grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto auto;
+        grid-auto-flow: column;
     }
 
     &__icon-button {
@@ -18,10 +20,11 @@
 }
 
 .column {
-    box-sizing: border-box;
-    height: 100%;
-    padding: 0.5rem;
-    background-color: var(--bg-color);
+    &__header {
+        margin: 0;
+        padding: 0 0.5rem 0.5rem;
+        border-bottom: solid 5px var(--bg-color);
+    }
 
     &__drag-zone {
         min-height: 100px;
@@ -33,9 +36,12 @@
     }
 
     &__list {
+    box-sizing: border-box;
         min-height: 100px;
         overflow: hidden;
         display: block;
+        padding: 0.5rem;
+        background-color: var(--bg-color);
     }
 
     &__item {

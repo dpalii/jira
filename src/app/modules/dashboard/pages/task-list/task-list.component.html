@@ -15,8 +15,8 @@
         </button>
     </div>
     <div class="task-list__board" cdkDropListGroup>
-        <div *ngFor="let column of taskStates" class="column">
-            <h2 class="column__header">{{column}}</h2>
+        <ng-template ngFor let-column [ngForOf]="taskStates">
+            <h3 class="column__header">{{column}}</h3>
             <div                
                 cdkDropList
                 class="column__list"
@@ -26,6 +26,6 @@
                     <app-task-list-item [task]="item"></app-task-list-item>
                 </div>
             </div>
-        </div>
+        </ng-template>
     </div>
 </section>

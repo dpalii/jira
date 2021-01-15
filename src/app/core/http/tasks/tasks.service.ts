@@ -106,6 +106,10 @@ export class TasksService {
     private usersService: UsersService
   ) { }
 
+  getTaskById(id: string): Observable<Task | undefined> {
+    return this.afs.doc<Task>(`tasks/${id}`).valueChanges();
+  }
+
   getTasks(): Observable<Task[]> {
     return this.afs.collection<Task>('tasks').valueChanges();
   }

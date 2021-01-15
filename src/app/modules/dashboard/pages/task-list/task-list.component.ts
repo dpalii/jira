@@ -40,18 +40,16 @@ export class TaskListComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<Task[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
+    if (event.previousContainer !== event.container) {
       transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
       const newCol = this.columns.find(col => col.tasks === event.container.data) as Column;
 
       this.tasksService.updateTask({
-        ...event.container.data[event.currentIndex],
-        status: newCol.name
+      ...event.container.data[event.currentIndex],
+      status: newCol.name
       });
     }
   }
@@ -62,9 +60,11 @@ export class TaskListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.tasksService.createTask(result).subscribe({
-        error: err => console.log(err)
-      });
+      if (result) {
+        this.tasksService.createTask(result).subscribe({
+          error: err => console.log(err)
+        });
+      }
     });
   }
 }

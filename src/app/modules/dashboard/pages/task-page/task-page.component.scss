@@ -1,0 +1,111 @@
+.task-page {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 1rem;
+    color: var(--main-text-color);
+
+    &__estimate {
+        color: var(--main-text-color);
+        height: 1.5rem;
+        width: 2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        align-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 0.75rem;
+        background-color: rgba(9,30,66,0.13);
+    }
+    
+    &__icon {
+        height: 1.5rem;
+        margin-right: 0.5rem;
+    }
+
+    &__controls {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    &__icon-button {
+        padding: 0 1rem 0 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    &__subheader {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+
+        &--grid {
+            grid-column-start: 1;
+            grid-column-end: 3;
+            margin: 0;
+        }
+    }
+
+    &__desc {
+        $line-height: 1.25rem;
+        font-size: 1rem;
+        line-height: $line-height;
+        height: calc(#{$line-height} * 10);
+        overflow: auto;
+        border: 1px solid var(--divider-color);
+        padding: 0.5rem;
+    }
+
+    &__labels {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-bottom: 0.5rem;
+    }
+
+    &__field {
+        margin-right: 0.5rem;
+    }
+    
+    &__label {
+        color: white;
+        height: 2rem;
+        padding: 0 1rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        border-radius: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        align-content: center;
+        border-radius: 1rem;
+        background-color: var(--label-color);
+    }
+
+    &__avatar {
+        height: 2rem;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+    }
+
+    &__cell {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &--label {
+            align-items: flex-start;
+            line-height: 2rem;
+            vertical-align: middle;
+        }
+    }
+
+    &__secondary {
+        display: grid;
+        grid-gap: 0.5rem;
+        grid-template-columns: min-content auto;
+        grid-auto-rows: min-content;
+    }
+}

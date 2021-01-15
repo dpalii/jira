@@ -1,4 +1,109 @@
 <section>
-    <app-header>Task</app-header>
-    <p>task-page works!</p>
+    <app-header>{{task?.title}}</app-header>
+    <div class="task-page">
+        <div class="task-page__controls">
+            <button class="task-page__icon-button" mat-button>
+                <mat-icon>edit</mat-icon>
+                <span> Edit</span>
+            </button>
+            <button class="task-page__icon-button" mat-button>
+                <mat-icon>delete</mat-icon>
+                <span> Delete</span>
+            </button>
+        </div>
+        <section class="task-page__main">
+            <section class="task-page__secondary">
+                <h3 class="task-page__subheader task-page__subheader--grid">Details</h3>
+                <div class="task-page__cell">
+                    <strong>Estimate:</strong>
+                </div>
+                <div class="task-page__cell">
+                    <span class="task-page__estimate">
+                        {{task?.estimate}}
+                    </span>
+                </div>
+                <div class="task-page__cell">
+                    <strong>Type:</strong>
+                </div>
+                <div class="task-page__cell">
+                    <img class="task-page__icon" [src]="type?.iconUrl"/>
+                    <span>
+                        {{type?.displayName}}
+                    </span>
+                </div>
+                <div class="task-page__cell">
+                    <strong>Priority:</strong>
+                </div>
+                <div class="task-page__cell">
+                    <img class="task-page__icon" [src]="priority?.iconUrl"/>
+                    <span>
+                        {{priority?.displayName}}
+                    </span>
+                </div>
+                <div class="task-page__cell task-page__cell--label">
+                    <strong>Labels:</strong>
+                </div>
+                <div class="task-page__labels">
+                    <span *ngIf="!task || !task.labels || task.labels.length === 0">None</span>
+                    <span class="task-page__label" *ngFor="let label of task?.labels">{{label}}</span>
+                </div>
+            </section>
+            <h3 class="task-page__subheader">Description</h3>
+            <p class="task-page__desc">{{task?.description}}</p>
+        </section>
+        <section class="task-page__secondary">
+            <h3 class="task-page__subheader task-page__subheader--grid">People</h3>
+            <div class="task-page__cell">
+                <strong>Assignee:</strong>
+            </div>
+            <div class="task-page__cell">
+                <img *ngIf="task?.assignee; else unassigned" class="task-page__avatar" [src]="task?.assignee?.photoURL || 'assets/images/default_avatar.svg'"/>
+                <ng-template #unassigned>
+                    <img class="task-page__avatar" [src]="'assets/images/unknown_avatar.png'"/>
+                </ng-template>
+                <span>
+                    {{
+                        task && task.assignee
+                            ? task.assignee.displayName || task.assignee.email 
+                            : 'Unassigned'
+                    }}
+                </span>
+            </div>
+            <div class="task-page__cell">
+                <strong>Reporter:</strong>
+            </div>
+            <div class="task-page__cell">
+                <img class="task-page__avatar" [src]="task?.reporter?.photoURL || 'assets/images/default_avatar.svg'"/>
+                <span>
+                    {{task?.reporter?.displayName || task?.reporter?.email || ''}}
+                </span>
+            </div>            
+            <h3 class="task-page__subheader task-page__subheader--grid">Dates</h3>
+            <div class="task-page__cell">
+                <strong>Due date:</strong>
+            </div>
+            <div class="task-page__cell">
+                <span>
+                    {{(task?.dueDate | date) || 'None'}}
+                </span>
+            </div>        
+            <div class="task-page__cell">
+                <strong>Created date:</strong>
+            </div>
+            <div class="task-page__cell">
+                <span>
+                    {{(task?.createdDate | date) || 'None'}}
+                </span>
+            </div>   
+            
+            <div class="task-page__cell">
+                <strong>Updated date:</strong>
+            </div>
+            <div class="task-page__cell">
+                <span>
+                    {{(task?.updatedDate | date) || 'None'}}
+                </span>
+            </div>   
+        </section>
+    </div>
 </section>
